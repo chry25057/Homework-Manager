@@ -8,9 +8,11 @@ import {
   RotateCcw,
   ExternalLink,
   Settings,
-  Edit2
+  Edit2,
+  HelpCircle
 } from 'lucide-react';
 import { useUniPilot } from '../context/useUniPilot';
+import { HelpModal } from './Help/HelpModal';
 
 export type TabType = 'dashboard' | 'assignments' | 'exams' | 'scoreCalculator';
 
@@ -29,6 +31,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const { clearAllData } = useUniPilot();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const settingsMenuRef = useRef<HTMLDivElement>(null);
 
   // 外側クリックで設定メニューを閉じる
@@ -181,14 +184,25 @@ export const Navbar: React.FC<NavbarProps> = ({
               {isSettingsOpen && (
                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 animate-in fade-in zoom-in-95 duration-100">
                   <div className="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 mb-1">
-                    設定メニュー
+                    設定
                   </div>
 
                   <button
-                    onClick={handleOpenSyllabus}
+                    onClick={() => {
+                      setIsSettingsOpen(false);
+                      setIsHelpModalOpen(true);
+                    }}
                     className="w-full text-left px-3.5 py-2 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-700 flex items-center gap-2 cursor-pointer transition-colors"
                   >
-                    <ExternalLink className="w-3.5 h-3.5 text-blue-600" />
+                    <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
+                    <span>使い方</span>
+                  </button>
+
+                  <button
+                    onClick={handleOpenSyllabus}
+                    className="w-full text-left px-3.5 py-2 text-xs text-slate-700 hover:bg-slate-50 flex items-center gap-2 cursor-pointer transition-colors"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
                     <span>大学シラバスを開く</span>
                   </button>
 
@@ -236,6 +250,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           );
         })}
       </div>
+
+      {/* 使い方モーダル */}
+      <HelpModal 
+        isOpen={isHelpModalOpen} 
+        onClose={() => setIsHelpModalOpen(false)} 
+      />
     </header>
   );
 };

@@ -296,7 +296,7 @@ export const ExamModal: React.FC<ExamModalProps> = ({
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="例: 期末試験、中間試験、単元試験"
+                placeholder="例: 期末試験、中間試験、第3回小テスト"
                 className="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium"
               />
             </div>

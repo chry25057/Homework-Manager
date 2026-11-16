@@ -168,7 +168,7 @@ export const ScoreCalculatorView: React.FC<ScoreCalculatorViewProps> = ({
               <span className="text-xs text-slate-500 font-semibold shrink-0">点</span>
             </div>
             <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-              出席、小試験、課題などすでに確定している持ち点や、今後少なくとも取れる点数(出席や課題など)の合計
+              出席、小テスト、課題などすでに確定している持ち点や、今後少なくとも取れる点数(出席や課題など)の合計
             </p>
           </div>
 
