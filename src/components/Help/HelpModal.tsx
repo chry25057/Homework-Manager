@@ -21,25 +21,23 @@ export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div 
-        className="bg-white rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden border border-slate-200 flex flex-col max-h-[90vh]"
+        className="bg-white rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden border border-slate-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* モーダルヘッダー */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50 shrink-0">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-xs">
-              <BookOpen className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-base font-bold text-slate-900">Homework Manager の使い方</h2>
-              <p className="text-xs text-slate-500">限られた時間で効率よく単位を取得するためのガイド</p>
-            </div>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50">
+          <div>
+            <h2 className="text-base font-bold text-slate-900">
+              Homework Manager の使い方
+            </h2>
           </div>
+
           <button
+            type="button"
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200/60 rounded-lg transition-colors cursor-pointer"
+            className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition-colors"
             title="閉じる"
           >
             <X className="w-5 h-5" />
@@ -47,7 +45,7 @@ export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* スクロールコンテンツ */}
-        <div className="p-6 overflow-y-auto space-y-6 text-slate-700 text-xs sm:text-sm leading-relaxed">
+        <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto text-slate-700 text-xs sm:text-sm leading-relaxed">
           
           {/* コンセプト */}
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-blue-950 space-y-1.5">
@@ -154,8 +152,9 @@ export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* モーダルフッター */}
-        <div className="flex items-center justify-end px-6 py-3.5 bg-slate-50 border-t border-slate-200 shrink-0">
+        <div className="flex items-center justify-end px-6 py-3.5 bg-slate-50 border-t border-slate-200">
           <button
+            type="button"
             onClick={onClose}
             className="px-5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-800 hover:bg-slate-900 text-white shadow-xs transition-colors cursor-pointer"
           >

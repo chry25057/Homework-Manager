@@ -7,6 +7,7 @@ import { ExamsView } from './components/Exams/ExamsView';
 import { ScoreCalculatorView } from './components/ScoreCalculator/ScoreCalculatorView';
 import { AssignmentModal } from './components/Assignments/AssignmentModal';
 import { ExamModal } from './components/Exams/ExamModal';
+import { HelpModal } from './components/Help/HelpModal';
 import { Assignment, Exam } from './types';
 
 const MainApp: React.FC = () => {
@@ -18,6 +19,8 @@ const MainApp: React.FC = () => {
 
   const [isExamModalOpen, setIsExamModalOpen] = useState(false);
   const [editingExam, setEditingExam] = useState<Exam | null>(null);
+
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
 
   // 逆算電卓用プリロード状態
   const [calcCourse, setCalcCourse] = useState<string | undefined>(undefined);
@@ -65,6 +68,7 @@ const MainApp: React.FC = () => {
           setEditingExam(null);
           setIsExamModalOpen(true);
         }}
+        onOpenHelpModal={() => setIsHelpModalOpen(true)}
       />
 
       {/* メインコンテンツ */}
@@ -147,6 +151,12 @@ const MainApp: React.FC = () => {
             addExam(data);
           }
         }}
+      />
+
+      {/* 使い方 モーダル */}
+      <HelpModal
+        isOpen={isHelpModalOpen}
+        onClose={() => setIsHelpModalOpen(false)}
       />
 
     </div>

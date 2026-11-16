@@ -12,8 +12,6 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { useUniPilot } from '../context/useUniPilot';
-import { HelpModal } from './Help/HelpModal';
-
 export type TabType = 'dashboard' | 'assignments' | 'exams' | 'scoreCalculator';
 
 interface NavbarProps {
@@ -21,6 +19,7 @@ interface NavbarProps {
   onTabChange: (tab: TabType) => void;
   onOpenAssignmentModal: () => void;
   onOpenExamModal: () => void;
+  onOpenHelpModal: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -28,10 +27,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   onTabChange,
   onOpenAssignmentModal,
   onOpenExamModal,
+  onOpenHelpModal,
 }) => {
   const { clearAllData } = useUniPilot();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const settingsMenuRef = useRef<HTMLDivElement>(null);
 
   // 外側クリックで設定メニューを閉じる
@@ -190,7 +189,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <button
                     onClick={() => {
                       setIsSettingsOpen(false);
-                      setIsHelpModalOpen(true);
+                      onOpenHelpModal();
                     }}
                     className="w-full text-left px-3.5 py-2 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-700 flex items-center gap-2 cursor-pointer transition-colors"
                   >
@@ -250,12 +249,6 @@ export const Navbar: React.FC<NavbarProps> = ({
           );
         })}
       </div>
-
-      {/* 使い方モーダル */}
-      <HelpModal 
-        isOpen={isHelpModalOpen} 
-        onClose={() => setIsHelpModalOpen(false)} 
-      />
     </header>
   );
 };
