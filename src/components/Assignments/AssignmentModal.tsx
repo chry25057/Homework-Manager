@@ -230,7 +230,7 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
     const parsedEstimated = estimatedMinutes.trim() !== '' ? parseInt(estimatedMinutes) : undefined;
     const perItemWeight = calculatedPerItemWeight !== null ? calculatedPerItemWeight : undefined;
     const totalWeight = totalWeightPercent.trim() !== '' ? parseFloat(totalWeightPercent) : undefined;
-    const cleanCourseName = courseName.trim() || '（講義名未設定）';
+    const cleanCourseName = courseName.trim();
 
     // 毎週課題の一括登録モード（新規作成時）
     if (isWeekly && batchCreateAll && !initialAssignment) {
@@ -408,7 +408,7 @@ export const AssignmentModal: React.FC<AssignmentModalProps> = ({
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="例: 小テスト、レポート課題、演習問題"
+                placeholder="例: レポート課題、演習問題、課題"
                 className="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
               />
             </div>

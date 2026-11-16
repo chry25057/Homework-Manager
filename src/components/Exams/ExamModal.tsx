@@ -185,7 +185,7 @@ export const ExamModal: React.FC<ExamModalProps> = ({
 
   const performSave = () => {
     if (!title.trim()) {
-      alert('テスト名を入力してください。');
+      alert('試験名を入力してください。');
       return false;
     }
     if (!examDateDay) {
@@ -198,7 +198,7 @@ export const ExamModal: React.FC<ExamModalProps> = ({
 
     onSave({
       title: title.trim(),
-      courseName: courseName.trim() || '（講義名未設定）',
+      courseName: courseName.trim(),
       examDate: new Date(finalDateStr).toISOString(),
       understanding: Number(understanding),
       estimatedStudyMinutes: Number(estimatedStudyMinutes) || 120,
@@ -244,7 +244,7 @@ export const ExamModal: React.FC<ExamModalProps> = ({
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50">
           <div>
             <h2 className="text-base font-bold text-slate-900">
-              {initialExam ? 'テスト勉強の編集' : '新しいテスト勉強を登録'}
+              {initialExam ? '試験勉強の編集' : '新しい試験勉強を登録'}
             </h2>
           </div>
 
@@ -286,17 +286,17 @@ export const ExamModal: React.FC<ExamModalProps> = ({
           
           <div className="space-y-4">
             
-            {/* 1. テスト名（必須） */}
+            {/* 1. 試験名（必須） */}
             <div>
               <label className="block text-xs font-bold text-slate-800 mb-1">
-                テスト名 <span className="text-red-500">*</span>
+                試験名 <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="例: 期末試験、中間試験、第3回小テスト"
+                placeholder="例: 期末試験、中間試験、単元試験"
                 className="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium"
               />
             </div>
@@ -426,7 +426,7 @@ export const ExamModal: React.FC<ExamModalProps> = ({
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  テストの難易度
+                  試験の難易度
                 </label>
                 <select
                   value={difficulty}
@@ -498,7 +498,7 @@ export const ExamModal: React.FC<ExamModalProps> = ({
               type="submit"
               className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 shadow-md shadow-amber-500/20 cursor-pointer transition-all"
             >
-              {initialExam ? 'テスト勉強を更新' : 'テスト勉強を登録する'}
+              {initialExam ? '試験勉強を更新' : '試験勉強を登録する'}
             </button>
           </div>
 

@@ -117,10 +117,10 @@ export const ScoreCalculatorView: React.FC<ScoreCalculatorViewProps> = ({
               className="text-xs px-3 py-2 rounded-xl border border-slate-300 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               defaultValue=""
             >
-              <option value="" disabled>テストを選択...</option>
+              <option value="" disabled>試験を選択...</option>
               {selectableExams.map(e => (
                 <option key={e.id} value={e.id}>
-                  {e.courseName} - {e.title}
+                  {e.courseName && e.courseName !== '（講義名未設定）' && e.courseName !== '(講義名未設定)' ? `${e.courseName} - ` : ''}{e.title}
                 </option>
               ))}
             </select>
@@ -168,7 +168,7 @@ export const ScoreCalculatorView: React.FC<ScoreCalculatorViewProps> = ({
               <span className="text-xs text-slate-500 font-semibold shrink-0">点</span>
             </div>
             <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">
-              出席、小テスト、課題などすでに確定している持ち点や、今後少なくとも取れる点数(出席や課題など)の合計
+              出席、小試験、課題などすでに確定している持ち点や、今後少なくとも取れる点数(出席や課題など)の合計
             </p>
           </div>
 

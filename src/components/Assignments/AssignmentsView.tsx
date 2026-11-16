@@ -50,7 +50,9 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
   const courses = useMemo(() => {
     const set = new Set<string>();
     assignments.forEach(a => {
-      if (a.courseName) set.add(a.courseName);
+      if (a.courseName && a.courseName !== '（講義名未設定）' && a.courseName !== '(講義名未設定)') {
+        set.add(a.courseName);
+      }
     });
     return Array.from(set);
   }, [assignments]);
@@ -249,9 +251,11 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
 
                     <div>
                       <div className="flex items-center gap-2 flex-wrap mb-1">
-                        <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-blue-100 text-blue-800">
-                          {assignment.courseName}
-                        </span>
+                        {assignment.courseName && assignment.courseName !== '（講義名未設定）' && assignment.courseName !== '(講義名未設定)' && (
+                          <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-blue-100 text-blue-800">
+                            {assignment.courseName}
+                          </span>
+                        )}
                         
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${progressInfo.bgColor} ${progressInfo.color}`}>
                           {progressInfo.text}
@@ -290,7 +294,7 @@ export const AssignmentsView: React.FC<AssignmentsViewProps> = ({
                       </div>
 
                       <h3 className={`text-base font-bold ${isSubmitted ? 'line-through text-slate-400' : 'text-slate-900'}`}>
-                        {assignment.title || `${assignment.courseName} 課題`}
+                        {assignment.title || (assignment.courseName && assignment.courseName !== '（講義名未設定）' && assignment.courseName !== '(講義名未設定)' ? `${assignment.courseName} 課題` : '無題の課題')}
                       </h3>
 
                       {assignment.notes && (

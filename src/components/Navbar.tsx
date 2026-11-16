@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   Compass, 
   FileText, 
@@ -6,7 +6,9 @@ import {
   Calculator,
   Plus,
   RotateCcw,
-  ExternalLink
+  ExternalLink,
+  Settings,
+  Edit2
 } from 'lucide-react';
 import { useUniPilot } from '../context/useUniPilot';
 
@@ -26,11 +28,75 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenExamModal,
 }) => {
   const { clearAllData } = useUniPilot();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const settingsMenuRef = useRef<HTMLDivElement>(null);
+
+  // 外側クリックで設定メニューを閉じる
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (settingsMenuRef.current && !settingsMenuRef.current.contains(event.target as Node)) {
+        setIsSettingsOpen(false);
+      }
+    };
+    if (isSettingsOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isSettingsOpen]);
+
+  // シラバスを開く
+  const handleOpenSyllabus = () => {
+    setIsSettingsOpen(false);
+    let url = localStorage.getItem('unipilot_syllabus_url');
+    if (!url) {
+      const input = window.prompt('大学のシラバスページのURLを入力・登録してください（例: https://syllabus.example.ac.jp）');
+      if (input && input.trim()) {
+        let clean = input.trim();
+        if (!clean.startsWith('http://') && !clean.startsWith('https://')) {
+          clean = 'https://' + clean;
+        }
+        localStorage.setItem('unipilot_syllabus_url', clean);
+        url = clean;
+      } else {
+        return;
+      }
+    }
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  };
+
+  // シラバスURLの登録・変更
+  const handleChangeSyllabusUrl = () => {
+    setIsSettingsOpen(false);
+    const current = localStorage.getItem('unipilot_syllabus_url') || '';
+    const input = window.prompt('大学のシラバスページのURLを入力・変更してください', current);
+    if (input !== null) {
+      let clean = input.trim();
+      if (clean && !clean.startsWith('http://') && !clean.startsWith('https://')) {
+        clean = 'https://' + clean;
+      }
+      localStorage.setItem('unipilot_syllabus_url', clean);
+      if (clean) {
+        alert('シラバスURLを保存しました。');
+      }
+    }
+  };
+
+  // 全データクリア
+  const handleClearAll = () => {
+    setIsSettingsOpen(false);
+    if (confirm('登録されているすべての課題・試験データを削除して初期化しますか？')) {
+      clearAllData();
+    }
+  };
 
   const navItems: { id: TabType; label: string; icon: React.ReactNode }[] = [
     { id: 'dashboard', label: '今やるべきこと', icon: <Compass className="w-4 h-4" /> },
     { id: 'assignments', label: '提出課題', icon: <FileText className="w-4 h-4" /> },
-    { id: 'exams', label: 'テスト勉強', icon: <GraduationCap className="w-4 h-4" /> },
+    { id: 'exams', label: '試験勉強', icon: <GraduationCap className="w-4 h-4" /> },
     { id: 'scoreCalculator', label: '試験 必要得点計算機', icon: <Calculator className="w-4 h-4" /> },
   ];
 
@@ -43,7 +109,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center gap-3">
             <button 
               onClick={() => onTabChange('dashboard')} 
-              className="flex items-center gap-2.5 group text-left"
+              className="flex items-center gap-2.5 group text-left cursor-pointer"
             >
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
                 <Compass className="w-5 h-5 animate-pulse" />
@@ -64,7 +130,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={item.id}
                   onClick={() => onTabChange(item.id)}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all ${
+                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${
                     isActive
                       ? 'bg-blue-50 text-blue-700 shadow-xs font-bold'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
@@ -79,61 +145,74 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Actions */}
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                let url = localStorage.getItem('unipilot_syllabus_url');
-                if (!url) {
-                  const input = window.prompt('大学のシラバスページのURLを入力してください（例: https://syllabus.example.ac.jp）');
-                  if (input && input.trim()) {
-                    let clean = input.trim();
-                    if (!clean.startsWith('http://') && !clean.startsWith('https://')) {
-                      clean = 'https://' + clean;
-                    }
-                    localStorage.setItem('unipilot_syllabus_url', clean);
-                    url = clean;
-                  } else {
-                    return;
-                  }
-                }
-                if (url) {
-                  window.open(url, '_blank', 'noopener,noreferrer');
-                }
-              }}
-              title="大学のシラバスページを開く"
-              className="px-2.5 py-1.5 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg text-xs flex items-center gap-1 border border-slate-200 cursor-pointer transition-colors"
-            >
-              <ExternalLink className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">シラバス</span>
-            </button>
-
-            <button
-              onClick={() => {
-                if (confirm('登録されているすべての課題・テストデータを削除して空にしますか？')) {
-                  clearAllData();
-                }
-              }}
-              title="すべての登録データを削除して初期化"
-              className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg text-xs flex items-center gap-1 border border-slate-200 cursor-pointer"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span className="hidden lg:inline">全データクリア</span>
-            </button>
-
+            {/* 課題追加ボタン */}
             <button
               onClick={onOpenAssignmentModal}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-colors shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition-colors shadow-xs cursor-pointer"
+              title="新しい課題を登録"
             >
               <Plus className="w-3.5 h-3.5 text-blue-600" />
-              <span>課題を追加</span>
+              <span>課題</span>
             </button>
 
+            {/* 試験追加ボタン */}
             <button
               onClick={onOpenExamModal}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-xs shadow-blue-500/20"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-xs shadow-blue-500/20 cursor-pointer"
+              title="新しい試験を登録"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>テストを追加</span>
+              <span>試験</span>
             </button>
+
+            {/* 右上端の設定ボタン（ドロップダウンメニュー） */}
+            <div className="relative" ref={settingsMenuRef}>
+              <button
+                onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                title="設定"
+                className={`p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer ${
+                  isSettingsOpen ? 'bg-slate-100 text-slate-900 ring-2 ring-blue-500/20' : ''
+                }`}
+              >
+                <Settings className="w-4 h-4" />
+              </button>
+
+              {/* ドロップダウンメニュー */}
+              {isSettingsOpen && (
+                <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50 animate-in fade-in zoom-in-95 duration-100">
+                  <div className="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 mb-1">
+                    設定メニュー
+                  </div>
+
+                  <button
+                    onClick={handleOpenSyllabus}
+                    className="w-full text-left px-3.5 py-2 text-xs text-slate-700 hover:bg-blue-50 hover:text-blue-700 flex items-center gap-2 cursor-pointer transition-colors"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5 text-blue-600" />
+                    <span>大学シラバスを開く</span>
+                  </button>
+
+                  <button
+                    onClick={handleChangeSyllabusUrl}
+                    className="w-full text-left px-3.5 py-2 text-xs text-slate-700 hover:bg-slate-50 flex items-center gap-2 cursor-pointer transition-colors"
+                  >
+                    <Edit2 className="w-3.5 h-3.5 text-slate-400" />
+                    <span>シラバスURLの設定・変更</span>
+                  </button>
+
+                  <div className="border-t border-slate-100 my-1"></div>
+
+                  <button
+                    onClick={handleClearAll}
+                    className="w-full text-left px-3.5 py-2 text-xs text-red-600 hover:bg-red-50 flex items-center gap-2 cursor-pointer transition-colors"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 text-red-500" />
+                    <span>全データを削除（初期化）</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
           </div>
 
         </div>

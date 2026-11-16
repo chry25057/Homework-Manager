@@ -63,7 +63,7 @@ export const ExamsView: React.FC<ExamsViewProps> = ({
       {/* 画面ヘッダー */}
       <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">テスト勉強の管理</h1>
+          <h1 className="text-xl font-bold text-slate-900">試験勉強の管理</h1>
         </div>
 
         <button
@@ -71,7 +71,7 @@ export const ExamsView: React.FC<ExamsViewProps> = ({
           className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-sm shadow-md shadow-amber-500/20 transition-all cursor-pointer"
         >
           <Plus className="w-4 h-4" />
-          <span>テスト勉強を追加</span>
+          <span>試験を追加</span>
         </button>
       </div>
 
@@ -83,7 +83,7 @@ export const ExamsView: React.FC<ExamsViewProps> = ({
             filter === 'all' ? 'bg-amber-50 border-amber-300 ring-2 ring-amber-500/20' : 'bg-white border-slate-200 hover:border-slate-300'
           }`}
         >
-          <div className="text-xs text-slate-500 font-semibold mb-1">登録テスト総数</div>
+          <div className="text-xs text-slate-500 font-semibold mb-1">登録試験総数</div>
           <div className="text-2xl font-black text-slate-800">{stats.total}</div>
         </div>
 
@@ -129,21 +129,21 @@ export const ExamsView: React.FC<ExamsViewProps> = ({
         ))}
       </div>
 
-      {/* テスト一覧 */}
+      {/* 試験一覧 */}
       {filteredExams.length === 0 ? (
         <div className="bg-white rounded-2xl p-12 text-center border border-dashed border-slate-300">
           <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
             <GraduationCap className="w-6 h-6" />
           </div>
-          <h3 className="text-sm font-bold text-slate-700 mb-1">該当するテストがありません</h3>
+          <h3 className="text-sm font-bold text-slate-700 mb-1">該当する試験がありません</h3>
           <p className="text-xs text-slate-400 mb-4">
-            「テスト勉強を追加」ボタンから中間試験や期末試験の計画を登録しましょう。
+            「試験を追加」ボタンから中間試験や期末試験の計画を登録しましょう。
           </p>
           <button
             onClick={onOpenAddModal}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-sm cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5" /> テスト勉強を追加
+            <Plus className="w-3.5 h-3.5" /> 試験を追加
           </button>
         </div>
       ) : (
@@ -155,6 +155,9 @@ export const ExamsView: React.FC<ExamsViewProps> = ({
             const isScoreWarning = exam.currentExpectedScore !== undefined && 
               exam.passingRequiredScore !== undefined && 
               exam.currentExpectedScore < exam.passingRequiredScore;
+            const hasValidCourseName = exam.courseName && 
+              exam.courseName !== '（講義名未設定）' && 
+              exam.courseName !== '(講義名未設定)';
 
             return (
               <div
@@ -172,9 +175,11 @@ export const ExamsView: React.FC<ExamsViewProps> = ({
                   {/* メイン情報 */}
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-amber-100 text-amber-800">
-                        {exam.courseName}
-                      </span>
+                      {hasValidCourseName && (
+                        <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-amber-100 text-amber-800">
+                          {exam.courseName}
+                        </span>
+                      )}
                       
                       {exam.weightPercent !== undefined && (
                         <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700">

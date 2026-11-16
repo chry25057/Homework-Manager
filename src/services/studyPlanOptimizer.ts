@@ -107,7 +107,7 @@ export function generateStudyPlan(
 
   let missingNotice = undefined;
   if (missingTimeCount > 0) {
-    missingNotice = `${missingTimeCount}件のテストで「目標到達に必要な勉強時間」が未設定です。設定するとより精密な時間配分が可能です。`;
+    missingNotice = `${missingTimeCount}件の試験で「目標到達に必要な勉強時間」が未設定です。設定するとより精密な時間配分が可能です。`;
   }
 
   return {

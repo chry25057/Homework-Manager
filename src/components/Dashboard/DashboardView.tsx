@@ -102,7 +102,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           className="bg-white p-5 rounded-2xl border border-slate-200 hover:border-amber-400 hover:shadow-xs transition-all cursor-pointer group"
         >
           <div className="text-xs font-semibold text-slate-500 group-hover:text-amber-700">
-            テスト勉強
+            試験勉強
           </div>
           <div className="text-3xl font-black text-slate-900 group-hover:text-amber-600 mt-1">
             {upcomingExamsCount} <span className="text-sm font-semibold text-slate-500">件</span>
@@ -211,12 +211,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-amber-100 text-amber-800">
-                            テスト勉強
+                            試験勉強
                           </span>
                         )}
 
                         {/* 講義名 */}
-                        {task.courseName && (
+                        {task.courseName && task.courseName !== '（講義名未設定）' && task.courseName !== '(講義名未設定)' && (
                           <span className="font-bold text-slate-700 text-xs sm:text-sm">
                             {task.courseName}
                           </span>
@@ -233,7 +233,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
                     {/* タスク名 */}
                     <div className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2 flex-wrap">
-                      <span>{task.title || (isAssignment ? `${task.courseName || ''} 課題` : task.courseName)}</span>
+                      <span>{task.title || (isAssignment ? (task.courseName && task.courseName !== '（講義名未設定）' && task.courseName !== '(講義名未設定)' ? `${task.courseName} 課題` : '無題の課題') : (task.courseName && task.courseName !== '（講義名未設定）' && task.courseName !== '(講義名未設定)' ? `${task.courseName} 試験` : '無題の試験'))}</span>
                       {isAssignment && assignment!.isWeekly && (
                         <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-800">
                           {assignment!.weeklyIndex ? `毎週 (第${assignment!.weeklyIndex}回)` : '毎週課題'}
@@ -370,9 +370,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     className="bg-slate-50 rounded-xl border border-slate-200 p-3.5 space-y-1 hover:bg-slate-100/70 transition-colors"
                   >
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-semibold text-slate-600 truncate">
-                        {item.task.courseName || ''}
-                      </span>
+                      {item.task.courseName && item.task.courseName !== '（講義名未設定）' && item.task.courseName !== '(講義名未設定)' ? (
+                        <span className="font-semibold text-slate-600 truncate">
+                          {item.task.courseName}
+                        </span>
+                      ) : <span />}
                       <span className="text-[10px] font-bold px-1.5 py-0.5 bg-slate-200 text-slate-700 rounded">
                         後回しOK
                       </span>
